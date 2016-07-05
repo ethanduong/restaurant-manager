@@ -27,6 +27,8 @@ public class LoginPanel extends javax.swing.JPanel {
      */
     public Users entity = new Users();
     List<Users> Userlst;
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("RestaurantManagermentPU");
+    UsersJpaController dao = new UsersJpaController(emf);
     public LoginPanel() {
         initComponents();
     }
@@ -55,6 +57,11 @@ public class LoginPanel extends javax.swing.JPanel {
         jLabel3.setText("Password:");
 
         btnLogin.setText("btnLogin");
+        btnLogin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnLoginMouseClicked(evt);
+            }
+        });
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLoginActionPerformed(evt);
@@ -114,10 +121,13 @@ public class LoginPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+        
+    }//GEN-LAST:event_btnLoginActionPerformed
+
+    private void btnLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLoginMouseClicked
         entity.setUserID(txtUsername.getText());
         entity.setPassword(txtPassword.getText());
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("RestaurantManagermentPU");
-        UsersJpaController dao = new UsersJpaController(emf);
+        
         try {
             Users found = dao.findUsers(entity.getUserID());
             if (found == null) {
@@ -132,7 +142,7 @@ public class LoginPanel extends javax.swing.JPanel {
         } catch (Exception ex) {
             Logger.getLogger(User_addNew.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_btnLoginActionPerformed
+    }//GEN-LAST:event_btnLoginMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

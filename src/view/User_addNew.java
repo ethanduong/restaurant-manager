@@ -14,7 +14,9 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import utils.Password;
 
 /**
  *
@@ -278,7 +280,11 @@ public class User_addNew extends javax.swing.JFrame {
     private void btnSubmitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSubmitMouseClicked
 
         entity.setUserID(userID.getText());
-        entity.setPassword(new String (password.getPassword()));
+        try {
+        entity.setPassword(Password.getSaltedHash(new String (password.getPassword())));
+        } catch (Exception e) {
+        e.printStackTrace();
+        }
         entity.setUserName(userName.getText());
         entity.setUserIDN(userIDN.getText());
         entity.setAddress(address.getText());
