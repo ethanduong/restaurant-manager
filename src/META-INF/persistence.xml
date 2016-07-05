@@ -10,7 +10,7 @@
     <class>dal.entity.Users</class>
     <class>dal.entity.MenuItem</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://localhost:49174;databaseName=RestaurantManagerment"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://localhost:60985;databaseName=RestaurantManagerment"/>
       <property name="javax.persistence.jdbc.password" value="1234567"/>
       <property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
       <property name="javax.persistence.jdbc.user" value="sa"/>
