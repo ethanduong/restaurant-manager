@@ -12,7 +12,7 @@ import javax.persistence.Embeddable;
 
 /**
  *
- * @author c1409l3512
+ * @author Jame Moriarty
  */
 @Embeddable
 public class OrderDetailsPK implements Serializable {

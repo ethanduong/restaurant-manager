@@ -7,6 +7,7 @@ package dal.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -16,11 +17,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author c1409l3512
+ * @author Jame Moriarty
  */
 @Entity
 @Table(name = "OrderDetails")
@@ -30,7 +33,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "OrderDetails.findByOrderID", query = "SELECT o FROM OrderDetails o WHERE o.orderDetailsPK.orderID = :orderID"),
     @NamedQuery(name = "OrderDetails.findByItemID", query = "SELECT o FROM OrderDetails o WHERE o.orderDetailsPK.itemID = :itemID"),
     @NamedQuery(name = "OrderDetails.findByItemQty", query = "SELECT o FROM OrderDetails o WHERE o.itemQty = :itemQty"),
-    @NamedQuery(name = "OrderDetails.findByAmount", query = "SELECT o FROM OrderDetails o WHERE o.amount = :amount")})
+    @NamedQuery(name = "OrderDetails.findByAmount", query = "SELECT o FROM OrderDetails o WHERE o.amount = :amount"),
+    @NamedQuery(name = "OrderDetails.findByDatetime", query = "SELECT o FROM OrderDetails o WHERE o.datetime = :datetime")})
 public class OrderDetails implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -42,12 +46,16 @@ public class OrderDetails implements Serializable {
     @Basic(optional = false)
     @Column(name = "amount")
     private BigDecimal amount;
-    @JoinColumn(name = "orderID", referencedColumnName = "orderID", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Orders orders;
+    @Basic(optional = false)
+    @Column(name = "datetime")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date datetime;
     @JoinColumn(name = "itemID", referencedColumnName = "itemID", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private MenuItem menuItem;
+    @JoinColumn(name = "orderID", referencedColumnName = "orderID", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Orders orders;
 
     public OrderDetails() {
     }
@@ -56,10 +64,11 @@ public class OrderDetails implements Serializable {
         this.orderDetailsPK = orderDetailsPK;
     }
 
-    public OrderDetails(OrderDetailsPK orderDetailsPK, short itemQty, BigDecimal amount) {
+    public OrderDetails(OrderDetailsPK orderDetailsPK, short itemQty, BigDecimal amount, Date datetime) {
         this.orderDetailsPK = orderDetailsPK;
         this.itemQty = itemQty;
         this.amount = amount;
+        this.datetime = datetime;
     }
 
     public OrderDetails(long orderID, short itemID) {
@@ -90,12 +99,12 @@ public class OrderDetails implements Serializable {
         this.amount = amount;
     }
 
-    public Orders getOrders() {
-        return orders;
+    public Date getDatetime() {
+        return datetime;
     }
 
-    public void setOrders(Orders orders) {
-        this.orders = orders;
+    public void setDatetime(Date datetime) {
+        this.datetime = datetime;
     }
 
     public MenuItem getMenuItem() {
@@ -104,6 +113,14 @@ public class OrderDetails implements Serializable {
 
     public void setMenuItem(MenuItem menuItem) {
         this.menuItem = menuItem;
+    }
+
+    public Orders getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Orders orders) {
+        this.orders = orders;
     }
 
     @Override

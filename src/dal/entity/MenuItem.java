@@ -12,6 +12,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -24,7 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author c1409l3512
+ * @author Jame Moriarty
  */
 @Entity
 @Table(name = "MenuItem")
@@ -39,6 +41,7 @@ public class MenuItem implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "itemID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Short itemID;
     @Basic(optional = false)
     @Column(name = "itemName")
@@ -47,11 +50,11 @@ public class MenuItem implements Serializable {
     @Basic(optional = false)
     @Column(name = "itemPrice")
     private BigDecimal itemPrice;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "menuItem")
+    private Collection<OrderDetails> orderDetailsCollection;
     @JoinColumn(name = "classID", referencedColumnName = "classID")
     @ManyToOne(optional = false)
     private ItemClass classID;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "menuItem")
-    private Collection<OrderDetails> orderDetailsCollection;
 
     public MenuItem() {
     }
@@ -90,14 +93,6 @@ public class MenuItem implements Serializable {
         this.itemPrice = itemPrice;
     }
 
-    public ItemClass getClassID() {
-        return classID;
-    }
-
-    public void setClassID(ItemClass classID) {
-        this.classID = classID;
-    }
-
     @XmlTransient
     public Collection<OrderDetails> getOrderDetailsCollection() {
         return orderDetailsCollection;
@@ -105,6 +100,14 @@ public class MenuItem implements Serializable {
 
     public void setOrderDetailsCollection(Collection<OrderDetails> orderDetailsCollection) {
         this.orderDetailsCollection = orderDetailsCollection;
+    }
+
+    public ItemClass getClassID() {
+        return classID;
+    }
+
+    public void setClassID(ItemClass classID) {
+        this.classID = classID;
     }
 
     @Override
@@ -129,7 +132,7 @@ public class MenuItem implements Serializable {
 
     @Override
     public String toString() {
-        return "dal.entity.MenuItem[ itemID=" + itemID + " ]";
+        return itemName;
     }
     
 }

@@ -24,7 +24,7 @@ import javax.persistence.EntityManagerFactory;
 
 /**
  *
- * @author c1409l3512
+ * @author Jame Moriarty
  */
 public class MenuItemJpaController implements Serializable {
 

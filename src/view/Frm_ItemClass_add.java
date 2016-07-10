@@ -17,13 +17,13 @@ import javax.persistence.Persistence;
  *
  * @author Jame Moriarty
  */
-public class ItemClass_add extends javax.swing.JFrame {
+public class Frm_ItemClass_add extends javax.swing.JFrame {
 
     /**
      * Creates new form NewJFrame
      */
     ItemClass item = new ItemClass();
-    public ItemClass_add() {
+    public Frm_ItemClass_add() {
         initComponents();
     }
 
@@ -141,7 +141,7 @@ public class ItemClass_add extends javax.swing.JFrame {
         try {
             dao.create(item);
         } catch (Exception ex) {
-            Logger.getLogger(ItemClass_add.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Frm_ItemClass_add.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnSubMouseClicked
 
@@ -162,21 +162,23 @@ public class ItemClass_add extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ItemClass_add.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frm_ItemClass_add.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ItemClass_add.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frm_ItemClass_add.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ItemClass_add.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frm_ItemClass_add.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ItemClass_add.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frm_ItemClass_add.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ItemClass_add().setVisible(true);
+                new Frm_ItemClass_add().setVisible(true);
             }
         });
     }

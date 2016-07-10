@@ -13,9 +13,9 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import dal.entity.Users;
-import dal.entity.Tables;
 import dal.entity.Customer;
+import dal.entity.Tables;
+import dal.entity.Users;
 import dal.entity.OrderDetails;
 import dal.entity.Orders;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import javax.persistence.EntityManagerFactory;
 
 /**
  *
- * @author c1409l3512
+ * @author Jame Moriarty
  */
 public class OrdersJpaController implements Serializable {
 
@@ -47,20 +47,20 @@ public class OrdersJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Users userID = orders.getUserID();
-            if (userID != null) {
-                userID = em.getReference(userID.getClass(), userID.getUserID());
-                orders.setUserID(userID);
+            Customer cusID = orders.getCusID();
+            if (cusID != null) {
+                cusID = em.getReference(cusID.getClass(), cusID.getCusID());
+                orders.setCusID(cusID);
             }
             Tables tableID = orders.getTableID();
             if (tableID != null) {
                 tableID = em.getReference(tableID.getClass(), tableID.getTableID());
                 orders.setTableID(tableID);
             }
-            Customer cusID = orders.getCusID();
-            if (cusID != null) {
-                cusID = em.getReference(cusID.getClass(), cusID.getCusID());
-                orders.setCusID(cusID);
+            Users userID = orders.getUserID();
+            if (userID != null) {
+                userID = em.getReference(userID.getClass(), userID.getUserID());
+                orders.setUserID(userID);
             }
             Collection<OrderDetails> attachedOrderDetailsCollection = new ArrayList<OrderDetails>();
             for (OrderDetails orderDetailsCollectionOrderDetailsToAttach : orders.getOrderDetailsCollection()) {
@@ -69,17 +69,17 @@ public class OrdersJpaController implements Serializable {
             }
             orders.setOrderDetailsCollection(attachedOrderDetailsCollection);
             em.persist(orders);
-            if (userID != null) {
-                userID.getOrdersCollection().add(orders);
-                userID = em.merge(userID);
+            if (cusID != null) {
+                cusID.getOrdersCollection().add(orders);
+                cusID = em.merge(cusID);
             }
             if (tableID != null) {
                 tableID.getOrdersCollection().add(orders);
                 tableID = em.merge(tableID);
             }
-            if (cusID != null) {
-                cusID.getOrdersCollection().add(orders);
-                cusID = em.merge(cusID);
+            if (userID != null) {
+                userID.getOrdersCollection().add(orders);
+                userID = em.merge(userID);
             }
             for (OrderDetails orderDetailsCollectionOrderDetails : orders.getOrderDetailsCollection()) {
                 Orders oldOrdersOfOrderDetailsCollectionOrderDetails = orderDetailsCollectionOrderDetails.getOrders();
@@ -109,12 +109,12 @@ public class OrdersJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Orders persistentOrders = em.find(Orders.class, orders.getOrderID());
-            Users userIDOld = persistentOrders.getUserID();
-            Users userIDNew = orders.getUserID();
-            Tables tableIDOld = persistentOrders.getTableID();
-            Tables tableIDNew = orders.getTableID();
             Customer cusIDOld = persistentOrders.getCusID();
             Customer cusIDNew = orders.getCusID();
+            Tables tableIDOld = persistentOrders.getTableID();
+            Tables tableIDNew = orders.getTableID();
+            Users userIDOld = persistentOrders.getUserID();
+            Users userIDNew = orders.getUserID();
             Collection<OrderDetails> orderDetailsCollectionOld = persistentOrders.getOrderDetailsCollection();
             Collection<OrderDetails> orderDetailsCollectionNew = orders.getOrderDetailsCollection();
             List<String> illegalOrphanMessages = null;
@@ -129,17 +129,17 @@ public class OrdersJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            if (userIDNew != null) {
-                userIDNew = em.getReference(userIDNew.getClass(), userIDNew.getUserID());
-                orders.setUserID(userIDNew);
+            if (cusIDNew != null) {
+                cusIDNew = em.getReference(cusIDNew.getClass(), cusIDNew.getCusID());
+                orders.setCusID(cusIDNew);
             }
             if (tableIDNew != null) {
                 tableIDNew = em.getReference(tableIDNew.getClass(), tableIDNew.getTableID());
                 orders.setTableID(tableIDNew);
             }
-            if (cusIDNew != null) {
-                cusIDNew = em.getReference(cusIDNew.getClass(), cusIDNew.getCusID());
-                orders.setCusID(cusIDNew);
+            if (userIDNew != null) {
+                userIDNew = em.getReference(userIDNew.getClass(), userIDNew.getUserID());
+                orders.setUserID(userIDNew);
             }
             Collection<OrderDetails> attachedOrderDetailsCollectionNew = new ArrayList<OrderDetails>();
             for (OrderDetails orderDetailsCollectionNewOrderDetailsToAttach : orderDetailsCollectionNew) {
@@ -149,13 +149,13 @@ public class OrdersJpaController implements Serializable {
             orderDetailsCollectionNew = attachedOrderDetailsCollectionNew;
             orders.setOrderDetailsCollection(orderDetailsCollectionNew);
             orders = em.merge(orders);
-            if (userIDOld != null && !userIDOld.equals(userIDNew)) {
-                userIDOld.getOrdersCollection().remove(orders);
-                userIDOld = em.merge(userIDOld);
+            if (cusIDOld != null && !cusIDOld.equals(cusIDNew)) {
+                cusIDOld.getOrdersCollection().remove(orders);
+                cusIDOld = em.merge(cusIDOld);
             }
-            if (userIDNew != null && !userIDNew.equals(userIDOld)) {
-                userIDNew.getOrdersCollection().add(orders);
-                userIDNew = em.merge(userIDNew);
+            if (cusIDNew != null && !cusIDNew.equals(cusIDOld)) {
+                cusIDNew.getOrdersCollection().add(orders);
+                cusIDNew = em.merge(cusIDNew);
             }
             if (tableIDOld != null && !tableIDOld.equals(tableIDNew)) {
                 tableIDOld.getOrdersCollection().remove(orders);
@@ -165,13 +165,13 @@ public class OrdersJpaController implements Serializable {
                 tableIDNew.getOrdersCollection().add(orders);
                 tableIDNew = em.merge(tableIDNew);
             }
-            if (cusIDOld != null && !cusIDOld.equals(cusIDNew)) {
-                cusIDOld.getOrdersCollection().remove(orders);
-                cusIDOld = em.merge(cusIDOld);
+            if (userIDOld != null && !userIDOld.equals(userIDNew)) {
+                userIDOld.getOrdersCollection().remove(orders);
+                userIDOld = em.merge(userIDOld);
             }
-            if (cusIDNew != null && !cusIDNew.equals(cusIDOld)) {
-                cusIDNew.getOrdersCollection().add(orders);
-                cusIDNew = em.merge(cusIDNew);
+            if (userIDNew != null && !userIDNew.equals(userIDOld)) {
+                userIDNew.getOrdersCollection().add(orders);
+                userIDNew = em.merge(userIDNew);
             }
             for (OrderDetails orderDetailsCollectionNewOrderDetails : orderDetailsCollectionNew) {
                 if (!orderDetailsCollectionOld.contains(orderDetailsCollectionNewOrderDetails)) {
@@ -224,20 +224,20 @@ public class OrdersJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Users userID = orders.getUserID();
-            if (userID != null) {
-                userID.getOrdersCollection().remove(orders);
-                userID = em.merge(userID);
+            Customer cusID = orders.getCusID();
+            if (cusID != null) {
+                cusID.getOrdersCollection().remove(orders);
+                cusID = em.merge(cusID);
             }
             Tables tableID = orders.getTableID();
             if (tableID != null) {
                 tableID.getOrdersCollection().remove(orders);
                 tableID = em.merge(tableID);
             }
-            Customer cusID = orders.getCusID();
-            if (cusID != null) {
-                cusID.getOrdersCollection().remove(orders);
-                cusID = em.merge(cusID);
+            Users userID = orders.getUserID();
+            if (userID != null) {
+                userID.getOrdersCollection().remove(orders);
+                userID = em.merge(userID);
             }
             em.remove(orders);
             em.getTransaction().commit();

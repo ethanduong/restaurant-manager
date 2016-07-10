@@ -28,7 +28,7 @@ import javax.swing.table.TableRowSorter;
  *
  * @author Jame Moriarty
  */
-public class OrderDetail_add extends javax.swing.JFrame {
+public class Frm_OrderDetail_add extends javax.swing.JFrame {
 
     /**
      * Creates new form OrderDetail
@@ -42,7 +42,7 @@ public class OrderDetail_add extends javax.swing.JFrame {
     ArrayList<Integer> itemId = new ArrayList<>();
     Orders ord = new Orders();
     OrderDetails ordtls= new OrderDetails();
-    public OrderDetail_add() {
+    public Frm_OrderDetail_add() {
         initComponents();
         showtableItem();
     }
@@ -359,7 +359,7 @@ public class OrderDetail_add extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(pnlOrderInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(pnlOrderInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 799, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -438,21 +438,23 @@ public class OrderDetail_add extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(OrderDetail_add.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frm_OrderDetail_add.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(OrderDetail_add.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frm_OrderDetail_add.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(OrderDetail_add.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frm_OrderDetail_add.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(OrderDetail_add.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frm_OrderDetail_add.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new OrderDetail_add().setVisible(true);
+                new Frm_OrderDetail_add().setVisible(true);
             }
         });
     }

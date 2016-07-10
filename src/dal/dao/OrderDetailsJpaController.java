@@ -12,17 +12,17 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import dal.entity.Orders;
 import dal.entity.MenuItem;
 import dal.entity.OrderDetails;
 import dal.entity.OrderDetailsPK;
+import dal.entity.Orders;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 /**
  *
- * @author c1409l3512
+ * @author Jame Moriarty
  */
 public class OrderDetailsJpaController implements Serializable {
 
@@ -39,30 +39,30 @@ public class OrderDetailsJpaController implements Serializable {
         if (orderDetails.getOrderDetailsPK() == null) {
             orderDetails.setOrderDetailsPK(new OrderDetailsPK());
         }
-        orderDetails.getOrderDetailsPK().setItemID(orderDetails.getMenuItem().getItemID());
         orderDetails.getOrderDetailsPK().setOrderID(orderDetails.getOrders().getOrderID());
+        orderDetails.getOrderDetailsPK().setItemID(orderDetails.getMenuItem().getItemID());
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Orders orders = orderDetails.getOrders();
-            if (orders != null) {
-                orders = em.getReference(orders.getClass(), orders.getOrderID());
-                orderDetails.setOrders(orders);
-            }
             MenuItem menuItem = orderDetails.getMenuItem();
             if (menuItem != null) {
                 menuItem = em.getReference(menuItem.getClass(), menuItem.getItemID());
                 orderDetails.setMenuItem(menuItem);
             }
-            em.persist(orderDetails);
+            Orders orders = orderDetails.getOrders();
             if (orders != null) {
-                orders.getOrderDetailsCollection().add(orderDetails);
-                orders = em.merge(orders);
+                orders = em.getReference(orders.getClass(), orders.getOrderID());
+                orderDetails.setOrders(orders);
             }
+            em.persist(orderDetails);
             if (menuItem != null) {
                 menuItem.getOrderDetailsCollection().add(orderDetails);
                 menuItem = em.merge(menuItem);
+            }
+            if (orders != null) {
+                orders.getOrderDetailsCollection().add(orderDetails);
+                orders = em.merge(orders);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -78,34 +78,26 @@ public class OrderDetailsJpaController implements Serializable {
     }
 
     public void edit(OrderDetails orderDetails) throws NonexistentEntityException, Exception {
-        orderDetails.getOrderDetailsPK().setItemID(orderDetails.getMenuItem().getItemID());
         orderDetails.getOrderDetailsPK().setOrderID(orderDetails.getOrders().getOrderID());
+        orderDetails.getOrderDetailsPK().setItemID(orderDetails.getMenuItem().getItemID());
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             OrderDetails persistentOrderDetails = em.find(OrderDetails.class, orderDetails.getOrderDetailsPK());
-            Orders ordersOld = persistentOrderDetails.getOrders();
-            Orders ordersNew = orderDetails.getOrders();
             MenuItem menuItemOld = persistentOrderDetails.getMenuItem();
             MenuItem menuItemNew = orderDetails.getMenuItem();
-            if (ordersNew != null) {
-                ordersNew = em.getReference(ordersNew.getClass(), ordersNew.getOrderID());
-                orderDetails.setOrders(ordersNew);
-            }
+            Orders ordersOld = persistentOrderDetails.getOrders();
+            Orders ordersNew = orderDetails.getOrders();
             if (menuItemNew != null) {
                 menuItemNew = em.getReference(menuItemNew.getClass(), menuItemNew.getItemID());
                 orderDetails.setMenuItem(menuItemNew);
             }
+            if (ordersNew != null) {
+                ordersNew = em.getReference(ordersNew.getClass(), ordersNew.getOrderID());
+                orderDetails.setOrders(ordersNew);
+            }
             orderDetails = em.merge(orderDetails);
-            if (ordersOld != null && !ordersOld.equals(ordersNew)) {
-                ordersOld.getOrderDetailsCollection().remove(orderDetails);
-                ordersOld = em.merge(ordersOld);
-            }
-            if (ordersNew != null && !ordersNew.equals(ordersOld)) {
-                ordersNew.getOrderDetailsCollection().add(orderDetails);
-                ordersNew = em.merge(ordersNew);
-            }
             if (menuItemOld != null && !menuItemOld.equals(menuItemNew)) {
                 menuItemOld.getOrderDetailsCollection().remove(orderDetails);
                 menuItemOld = em.merge(menuItemOld);
@@ -113,6 +105,14 @@ public class OrderDetailsJpaController implements Serializable {
             if (menuItemNew != null && !menuItemNew.equals(menuItemOld)) {
                 menuItemNew.getOrderDetailsCollection().add(orderDetails);
                 menuItemNew = em.merge(menuItemNew);
+            }
+            if (ordersOld != null && !ordersOld.equals(ordersNew)) {
+                ordersOld.getOrderDetailsCollection().remove(orderDetails);
+                ordersOld = em.merge(ordersOld);
+            }
+            if (ordersNew != null && !ordersNew.equals(ordersOld)) {
+                ordersNew.getOrderDetailsCollection().add(orderDetails);
+                ordersNew = em.merge(ordersNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -143,15 +143,15 @@ public class OrderDetailsJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The orderDetails with id " + id + " no longer exists.", enfe);
             }
-            Orders orders = orderDetails.getOrders();
-            if (orders != null) {
-                orders.getOrderDetailsCollection().remove(orderDetails);
-                orders = em.merge(orders);
-            }
             MenuItem menuItem = orderDetails.getMenuItem();
             if (menuItem != null) {
                 menuItem.getOrderDetailsCollection().remove(orderDetails);
                 menuItem = em.merge(menuItem);
+            }
+            Orders orders = orderDetails.getOrders();
+            if (orders != null) {
+                orders.getOrderDetailsCollection().remove(orderDetails);
+                orders = em.merge(orders);
             }
             em.remove(orderDetails);
             em.getTransaction().commit();

@@ -16,14 +16,14 @@ import javax.persistence.Persistence;
  *
  * @author Jame Moriarty
  */
-public class Table extends javax.swing.JFrame {
+public class Frm_Table extends javax.swing.JFrame {
 
     /**
      * Creates new form Table
      */
-    static Table_add frame = new Table_add();
+    static Frm_Table_add frame = new Frm_Table_add();
     Tables tab = new Tables();
-    public Table() {
+    public Frm_Table() {
         initComponents();
     }
 
@@ -177,7 +177,7 @@ public class Table extends javax.swing.JFrame {
         try {
             dao.create(tab);
         } catch (Exception ex) {
-            Logger.getLogger(Table_add.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Frm_Table_add.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnSubmitMouseClicked
 
@@ -202,20 +202,21 @@ public class Table extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Table.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frm_Table.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Table.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frm_Table.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Table.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frm_Table.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Table.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frm_Table.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Table().setVisible(true);
+                new Frm_Table().setVisible(true);
             }
         });
     }

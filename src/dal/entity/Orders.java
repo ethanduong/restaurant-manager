@@ -8,7 +8,6 @@ package dal.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,14 +19,12 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author c1409l3512
+ * @author Jame Moriarty
  */
 @Entity
 @Table(name = "Orders")
@@ -36,8 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Orders.findAll", query = "SELECT o FROM Orders o"),
     @NamedQuery(name = "Orders.findByOrderID", query = "SELECT o FROM Orders o WHERE o.orderID = :orderID"),
     @NamedQuery(name = "Orders.findByTotalAmount", query = "SELECT o FROM Orders o WHERE o.totalAmount = :totalAmount"),
-    @NamedQuery(name = "Orders.findByStatus", query = "SELECT o FROM Orders o WHERE o.status = :status"),
-    @NamedQuery(name = "Orders.findByDatetime", query = "SELECT o FROM Orders o WHERE o.datetime = :datetime")})
+    @NamedQuery(name = "Orders.findByStatus", query = "SELECT o FROM Orders o WHERE o.status = :status")})
 public class Orders implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -51,21 +47,17 @@ public class Orders implements Serializable {
     @Basic(optional = false)
     @Column(name = "status")
     private boolean status;
-    @Basic(optional = false)
-    @Column(name = "datetime")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date datetime;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orders")
-    private Collection<OrderDetails> orderDetailsCollection;
-    @JoinColumn(name = "userID", referencedColumnName = "userID")
-    @ManyToOne(optional = false)
-    private Users userID;
-    @JoinColumn(name = "tableID", referencedColumnName = "tableID")
-    @ManyToOne(optional = false)
-    private Tables tableID;
     @JoinColumn(name = "cusID", referencedColumnName = "cusID")
     @ManyToOne(optional = false)
     private Customer cusID;
+    @JoinColumn(name = "tableID", referencedColumnName = "tableID")
+    @ManyToOne(optional = false)
+    private Tables tableID;
+    @JoinColumn(name = "userID", referencedColumnName = "userID")
+    @ManyToOne(optional = false)
+    private Users userID;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orders")
+    private Collection<OrderDetails> orderDetailsCollection;
 
     public Orders() {
     }
@@ -74,11 +66,10 @@ public class Orders implements Serializable {
         this.orderID = orderID;
     }
 
-    public Orders(Long orderID, BigDecimal totalAmount, boolean status, Date datetime) {
+    public Orders(Long orderID, BigDecimal totalAmount, boolean status) {
         this.orderID = orderID;
         this.totalAmount = totalAmount;
         this.status = status;
-        this.datetime = datetime;
     }
 
     public Long getOrderID() {
@@ -105,29 +96,12 @@ public class Orders implements Serializable {
         this.status = status;
     }
 
-    public Date getDatetime() {
-        return datetime;
+    public Customer getCusID() {
+        return cusID;
     }
 
-    public void setDatetime(Date datetime) {
-        this.datetime = datetime;
-    }
-
-    @XmlTransient
-    public Collection<OrderDetails> getOrderDetailsCollection() {
-        return orderDetailsCollection;
-    }
-
-    public void setOrderDetailsCollection(Collection<OrderDetails> orderDetailsCollection) {
-        this.orderDetailsCollection = orderDetailsCollection;
-    }
-
-    public Users getUserID() {
-        return userID;
-    }
-
-    public void setUserID(Users userID) {
-        this.userID = userID;
+    public void setCusID(Customer cusID) {
+        this.cusID = cusID;
     }
 
     public Tables getTableID() {
@@ -138,12 +112,21 @@ public class Orders implements Serializable {
         this.tableID = tableID;
     }
 
-    public Customer getCusID() {
-        return cusID;
+    public Users getUserID() {
+        return userID;
     }
 
-    public void setCusID(Customer cusID) {
-        this.cusID = cusID;
+    public void setUserID(Users userID) {
+        this.userID = userID;
+    }
+
+    @XmlTransient
+    public Collection<OrderDetails> getOrderDetailsCollection() {
+        return orderDetailsCollection;
+    }
+
+    public void setOrderDetailsCollection(Collection<OrderDetails> orderDetailsCollection) {
+        this.orderDetailsCollection = orderDetailsCollection;
     }
 
     @Override

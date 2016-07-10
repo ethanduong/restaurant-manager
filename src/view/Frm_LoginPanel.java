@@ -20,7 +20,7 @@ import utils.Password;
  *
  * @author c1308l3436
  */
-public class LoginPanel extends javax.swing.JPanel {
+public class Frm_LoginPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form LoginPanel
@@ -29,7 +29,7 @@ public class LoginPanel extends javax.swing.JPanel {
     List<Users> Userlst;
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("RestaurantManagermentPU");
     UsersJpaController dao = new UsersJpaController(emf);
-    public LoginPanel() {
+    public Frm_LoginPanel() {
         initComponents();
     }
 
@@ -97,7 +97,7 @@ public class LoginPanel extends javax.swing.JPanel {
                                         .addGap(78, 78, 78)
                                         .addComponent(jButton2)))
                                 .addGap(0, 0, Short.MAX_VALUE)))))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(200, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -116,7 +116,7 @@ public class LoginPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLogin)
                     .addComponent(jButton2))
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(165, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -140,7 +140,7 @@ public class LoginPanel extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(null, "Incorrect password", "Error!", JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception ex) {
-            Logger.getLogger(User_addNew.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Frm_user.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnLoginMouseClicked
 

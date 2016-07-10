@@ -11,6 +11,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -21,7 +23,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author c1409l3512
+ * @author Jame Moriarty
  */
 @Entity
 @Table(name = "ItemClass")
@@ -35,6 +37,7 @@ public class ItemClass implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "classID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Short classID;
     @Basic(optional = false)
     @Column(name = "className")
@@ -101,7 +104,7 @@ public class ItemClass implements Serializable {
 
     @Override
     public String toString() {
-        return "dal.entity.ItemClass[ classID=" + classID + " ]";
+        return className;
     }
     
 }

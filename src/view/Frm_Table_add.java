@@ -17,14 +17,14 @@ import javax.persistence.Persistence;
  *
  * @author Jame Moriarty
  */
-public class Table_add extends javax.swing.JFrame {
+public class Frm_Table_add extends javax.swing.JFrame {
 
     /**
      * Creates new form Table_add
      */
-    static Table_add frame = new Table_add();
+    static Frm_Table_add frame = new Frm_Table_add();
     Tables tab = new Tables();
-    public Table_add() {
+    public Frm_Table_add() {
         initComponents();
     }
 
@@ -146,7 +146,7 @@ public class Table_add extends javax.swing.JFrame {
         try {
             dao.create(tab);
         } catch (Exception ex) {
-            Logger.getLogger(Table_add.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Frm_Table_add.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnSubmitMouseClicked
 

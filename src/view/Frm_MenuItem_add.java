@@ -22,7 +22,7 @@ import javax.swing.JOptionPane;
  *
  * @author Jame Moriarty
  */
-public class MenuItem_add extends javax.swing.JFrame {
+public class Frm_MenuItem_add extends javax.swing.JFrame {
 
     /**
      * Creates new form MenuItem_add
@@ -30,7 +30,7 @@ public class MenuItem_add extends javax.swing.JFrame {
     MenuItem item = new MenuItem();
     List<ItemClass> classlist;
     ItemClass itc = new ItemClass();
-    public MenuItem_add() {
+    public Frm_MenuItem_add() {
         initComponents();
         loadcbx();
     }
@@ -189,7 +189,7 @@ public class MenuItem_add extends javax.swing.JFrame {
         try {
             dao.create(item);
         } catch (Exception ex) {
-            Logger.getLogger(MenuItem_add.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Frm_MenuItem_add.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println(itemPrice.getValue());
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -216,20 +216,21 @@ public class MenuItem_add extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MenuItem_add.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frm_MenuItem_add.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MenuItem_add.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frm_MenuItem_add.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MenuItem_add.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frm_MenuItem_add.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MenuItem_add.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Frm_MenuItem_add.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MenuItem_add().setVisible(true);
+                new Frm_MenuItem_add().setVisible(true);
             }
         });
     }

@@ -5,6 +5,7 @@
  */
 package view;
 
+import commonfunction.ValidateForm;
 import dal.dao.ItemClassJpaController;
 import dal.dao.MenuItemJpaController;
 import dal.entity.ItemClass;
@@ -17,15 +18,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
-
 
 /**
  *
  * @author Jame Moriarty
  */
-public class MenuItem_list extends javax.swing.JFrame {
+public class FMenuItem_list extends javax.swing.JFrame {
 
     /**
      * Creates new form MenuItem_list
@@ -34,10 +36,9 @@ public class MenuItem_list extends javax.swing.JFrame {
     List<MenuItem> menulist;
     MenuItem item = new MenuItem();
     List<ItemClass> classlist;
-    ItemClass itmc = new ItemClass();
-    ArrayList<Integer> itemId = new ArrayList<>();
-    public MenuItem_list() {
-        initComponents();      
+
+    public FMenuItem_list() {
+        initComponents();
         showtable();
         loadcbx();
     }
@@ -62,12 +63,12 @@ public class MenuItem_list extends javax.swing.JFrame {
         tblItem = new javax.swing.JTable();
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        itemName = new javax.swing.JTextField();
+        lblItemName = new javax.swing.JLabel();
+        txtitemName = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        itemClass = new javax.swing.JComboBox();
+        cbxitemClass = new javax.swing.JComboBox();
         jLabel4 = new javax.swing.JLabel();
-        itemPrice = new javax.swing.JFormattedTextField();
+        fmtxtitemPrice = new javax.swing.JFormattedTextField();
         jPanel4 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -138,27 +139,27 @@ public class MenuItem_list extends javax.swing.JFrame {
 
         jPanel7.setLayout(new java.awt.GridLayout(3, 2));
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Tên Món");
-        jPanel7.add(jLabel2);
-        jPanel7.add(itemName);
+        lblItemName.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblItemName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblItemName.setText("Tên Món");
+        jPanel7.add(lblItemName);
+        jPanel7.add(txtitemName);
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Loại");
         jPanel7.add(jLabel3);
 
-        jPanel7.add(itemClass);
+        jPanel7.add(cbxitemClass);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Giá tiền");
         jPanel7.add(jLabel4);
 
-        itemPrice.setColumns(10);
-        itemPrice.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,###.00"))));
-        jPanel7.add(itemPrice);
+        fmtxtitemPrice.setColumns(10);
+        fmtxtitemPrice.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,###.00"))));
+        jPanel7.add(fmtxtitemPrice);
 
         jPanel4.setLayout(new java.awt.GridLayout(4, 1));
 
@@ -173,6 +174,11 @@ public class MenuItem_list extends javax.swing.JFrame {
 
         jButton2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButton2.setText("Hủy");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         jPanel4.add(jButton2);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
@@ -229,50 +235,77 @@ public class MenuItem_list extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    public void loadcbx(){
+    public void loadcbx() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("RestaurantManagermentPU");
         ItemClassJpaController dao = new ItemClassJpaController(emf);
-        classlist= dao.findItemClassEntities();
-        
-////        classlist.stream().map((it) -> {
-////            itemClass.addItem(it.getClassName());
-////            return it;
-////        }).forEach((it) -> {
-////            itemId.add((int)it.getClassID());
-//        });       
+        classlist = dao.findItemClassEntities();
+        for (ItemClass clss : classlist) {
+            cbxitemClass.addItem(clss);
+        }
+
+    }
+
+    private boolean validateAddItem() {
+        if (txtitemName.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Tên Món không được trống !");
+            txtitemName.requestFocus();
+            return false;
+        }
+        if (txtitemName.getText().length() > 50) {
+            JOptionPane.showMessageDialog(null, "Tên Món không được quá 50 ký tự !");
+            clearform();
+            txtitemName.requestFocus();
+            return false;
+        }
+//        if (fmtxtitemPrice.getValue().getClass() == String.class) {
+//            JOptionPane.showMessageDialog(null, "Giá tiền phải là số !");
+//            return false;
+//        }
+        return true;
     }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        int id=itemId.get(itemClass.getSelectedIndex());
-        short s;
-        s=(short)id;
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("RestaurantManagermentPU");
-        MenuItemJpaController dao = new MenuItemJpaController(emf);
-        ItemClassJpaController daoclass = new ItemClassJpaController(emf);
-        itmc=daoclass.findItemClass(s);
-        item.setItemName(itemName.getText());
-        item.setItemPrice(new BigDecimal((long) itemPrice.getValue()));
-        item.setClassID(itmc);
-        try {
-            dao.create(item);
-        } catch (Exception ex) {
-            Logger.getLogger(MenuItem_add.class.getName()).log(Level.SEVERE, null, ex);
+        
+        if (validateAddItem() == true) {
+            try {
+                ItemClass selectedItem = (ItemClass) cbxitemClass.getSelectedItem();
+                EntityManagerFactory emf = Persistence.createEntityManagerFactory("RestaurantManagermentPU");
+                MenuItemJpaController dao = new MenuItemJpaController(emf);
+                ItemClassJpaController daoclass = new ItemClassJpaController(emf);
+                item.setItemName(txtitemName.getText());
+                item.setItemPrice(new BigDecimal((long) fmtxtitemPrice.getValue()));
+                item.setClassID(selectedItem);
+                dao.create(item);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(new JPanel(), "Giá trị nhập không hợp lệ !", "Lỗi Nhập Liệu", JOptionPane.ERROR_MESSAGE);
+            }
+            showtable();
         }
-        System.out.println(itemPrice.getValue());
+        clearform();
+        
     }//GEN-LAST:event_jButton1ActionPerformed
-    public void showtable(){
+    private void clearform(){
+        txtitemName.setText(null);
+        fmtxtitemPrice.setText(null);
+        txtitemName.requestFocus();
+    }
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        txtitemName.setText(null);
+        fmtxtitemPrice.setText(null);
+    }//GEN-LAST:event_jButton2ActionPerformed
+    public void showtable() {
         String tex_search = jTextField1.getText().trim();
         Vector data = new Vector();
         Vector cols = new Vector();
         cols.addElement("ID");
         cols.addElement("Tên Món Ăn - Đồ Uống");
         cols.addElement("Giá Tiền");
-        cols.addElement("Phân Loại");       
+        cols.addElement("Phân Loại");
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("RestaurantManagermentPU");
-        ItemClassJpaController icdao = new ItemClassJpaController(emf); 
-        MenuItemJpaController dao = new MenuItemJpaController(emf);        
+        ItemClassJpaController icdao = new ItemClassJpaController(emf);
+        MenuItemJpaController dao = new MenuItemJpaController(emf);
         menulist = dao.findMenuItemEntities();
-        for (MenuItem u: menulist ) {
-            Vector item = new Vector();                                
+        for (MenuItem u : menulist) {
+            Vector item = new Vector();
             item.addElement(u.getItemID());
             item.addElement(u.getItemName());
             item.addElement(u.getItemPrice());
@@ -285,6 +318,7 @@ public class MenuItem_list extends javax.swing.JFrame {
         TableRowSorter<DefaultTableModel> s = new TableRowSorter<DefaultTableModel>(tbl);
         tblItem.setRowSorter(s);
     }
+
     /**
      * @param args the command line arguments
      */
@@ -302,33 +336,32 @@ public class MenuItem_list extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MenuItem_list.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FMenuItem_list.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MenuItem_list.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FMenuItem_list.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MenuItem_list.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FMenuItem_list.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MenuItem_list.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FMenuItem_list.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-            new MenuItem_list().setVisible(true); 
+                new FMenuItem_list().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSearch;
-    private javax.swing.JComboBox itemClass;
-    private javax.swing.JTextField itemName;
-    private javax.swing.JFormattedTextField itemPrice;
+    private javax.swing.JComboBox cbxitemClass;
+    private javax.swing.JFormattedTextField fmtxtitemPrice;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
@@ -340,6 +373,8 @@ public class MenuItem_list extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel lblItemName;
     private javax.swing.JTable tblItem;
+    private javax.swing.JTextField txtitemName;
     // End of variables declaration//GEN-END:variables
 }

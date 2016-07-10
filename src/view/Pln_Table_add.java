@@ -9,12 +9,12 @@ package view;
  *
  * @author Jame Moriarty
  */
-public class NewJPanel1 extends javax.swing.JPanel {
+public class Pln_Table_add extends javax.swing.JPanel {
 
     /**
-     * Creates new form NewJPanel1
+     * Creates new form Pln_Table_add
      */
-    public NewJPanel1() {
+    public Pln_Table_add() {
         initComponents();
     }
 
@@ -27,30 +27,19 @@ public class NewJPanel1 extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-
-        jLabel1.setText("Panel2");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(168, 168, 168)
-                .addComponent(jLabel1)
-                .addContainerGap(200, Short.MAX_VALUE))
+            .addGap(0, 700, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(107, 107, 107)
-                .addComponent(jLabel1)
-                .addContainerGap(179, Short.MAX_VALUE))
+            .addGap(0, 621, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }
