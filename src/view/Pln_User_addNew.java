@@ -7,9 +7,9 @@ package view;
 
 import commonfunction.MD5;
 import dal.dao.UsersJpaController;
-import dal.dao.exceptions.IllegalOrphanException;
 import dal.dao.exceptions.NonexistentEntityException;
 import dal.entity.Users;
+import java.awt.Font;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -20,7 +20,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-
 
 /**
  *
@@ -71,9 +70,9 @@ public class Pln_User_addNew extends javax.swing.JPanel {
         lbemail = new javax.swing.JLabel();
         txtemail = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
-        btnSubmit = new javax.swing.JButton();
+        btnInsert = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
         txtSearch = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
@@ -117,8 +116,9 @@ public class Pln_User_addNew extends javax.swing.JPanel {
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 27, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
@@ -134,6 +134,7 @@ public class Pln_User_addNew extends javax.swing.JPanel {
         jPanel2.setPreferredSize(new java.awt.Dimension(500, 350));
         jPanel2.setLayout(new java.awt.GridLayout(8, 2));
 
+        lbuserID.setBackground(new java.awt.Color(255, 255, 255));
         lbuserID.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lbuserID.setForeground(new java.awt.Color(51, 51, 51));
         lbuserID.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -141,6 +142,7 @@ public class Pln_User_addNew extends javax.swing.JPanel {
         jPanel2.add(lbuserID);
         jPanel2.add(txtuserID);
 
+        lbpass.setBackground(new java.awt.Color(255, 255, 255));
         lbpass.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lbpass.setForeground(new java.awt.Color(51, 51, 51));
         lbpass.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -148,6 +150,7 @@ public class Pln_User_addNew extends javax.swing.JPanel {
         jPanel2.add(lbpass);
         jPanel2.add(txtpassword);
 
+        lbname.setBackground(new java.awt.Color(255, 255, 255));
         lbname.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lbname.setForeground(new java.awt.Color(51, 51, 51));
         lbname.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -155,6 +158,7 @@ public class Pln_User_addNew extends javax.swing.JPanel {
         jPanel2.add(lbname);
         jPanel2.add(txtuserName);
 
+        lbIDN.setBackground(new java.awt.Color(255, 255, 255));
         lbIDN.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lbIDN.setForeground(new java.awt.Color(51, 51, 51));
         lbIDN.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -162,6 +166,7 @@ public class Pln_User_addNew extends javax.swing.JPanel {
         jPanel2.add(lbIDN);
         jPanel2.add(txtuserIDN);
 
+        lbadd.setBackground(new java.awt.Color(255, 255, 255));
         lbadd.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lbadd.setForeground(new java.awt.Color(51, 51, 51));
         lbadd.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -169,6 +174,7 @@ public class Pln_User_addNew extends javax.swing.JPanel {
         jPanel2.add(lbadd);
         jPanel2.add(txtaddress);
 
+        lbphone.setBackground(new java.awt.Color(255, 255, 255));
         lbphone.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lbphone.setForeground(new java.awt.Color(51, 51, 51));
         lbphone.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -176,15 +182,17 @@ public class Pln_User_addNew extends javax.swing.JPanel {
         jPanel2.add(lbphone);
         jPanel2.add(txtphone);
 
+        lbrole.setBackground(new java.awt.Color(255, 255, 255));
         lbrole.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lbrole.setForeground(new java.awt.Color(51, 51, 51));
         lbrole.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbrole.setText("Chức vụ:");
         jPanel2.add(lbrole);
 
-        cbxposition.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Quản Lý", "Nhân Viên" }));
+        cbxposition.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Nhân Viên", "Quản Lý", " " }));
         jPanel2.add(cbxposition);
 
+        lbemail.setBackground(new java.awt.Color(255, 255, 255));
         lbemail.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lbemail.setForeground(new java.awt.Color(51, 51, 51));
         lbemail.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -196,16 +204,16 @@ public class Pln_User_addNew extends javax.swing.JPanel {
         jPanel3.setPreferredSize(new java.awt.Dimension(150, 250));
         jPanel3.setLayout(new java.awt.GridLayout(4, 1));
 
-        btnSubmit.setBackground(new java.awt.Color(255, 255, 255));
-        btnSubmit.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
-        btnSubmit.setForeground(new java.awt.Color(51, 51, 51));
-        btnSubmit.setText("Thêm");
-        btnSubmit.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnInsert.setBackground(new java.awt.Color(255, 255, 255));
+        btnInsert.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        btnInsert.setForeground(new java.awt.Color(51, 51, 51));
+        btnInsert.setText("Thêm");
+        btnInsert.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnSubmitMouseClicked(evt);
+                btnInsertMouseClicked(evt);
             }
         });
-        jPanel3.add(btnSubmit);
+        jPanel3.add(btnInsert);
 
         btnUpdate.setBackground(new java.awt.Color(255, 255, 255));
         btnUpdate.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
@@ -218,16 +226,16 @@ public class Pln_User_addNew extends javax.swing.JPanel {
         });
         jPanel3.add(btnUpdate);
 
-        jButton1.setBackground(new java.awt.Color(255, 255, 255));
-        jButton1.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(51, 51, 51));
-        jButton1.setText("Xóa");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnDelete.setBackground(new java.awt.Color(255, 255, 255));
+        btnDelete.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        btnDelete.setForeground(new java.awt.Color(51, 51, 51));
+        btnDelete.setText("Xóa");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnDeleteActionPerformed(evt);
             }
         });
-        jPanel3.add(jButton1);
+        jPanel3.add(btnDelete);
 
         btnCancel.setBackground(new java.awt.Color(255, 255, 255));
         btnCancel.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
@@ -296,13 +304,14 @@ public class Pln_User_addNew extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(47, 47, 47)
+                .addGap(29, 29, 29)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(104, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     // <editor-fold defaultstate="collapsed" desc="Validate Form">
-    public boolean validateSubmit(String userid, String Password, String Name, String IDN, String Address, String phone, String position, String email) {
+
+    public boolean validateSubmit(String userid, String Password, String Name, String IDN, String address, String phone, String position, String email) {
         if (userid.length() == 0) {
             JOptionPane.showMessageDialog(null, "Tên Đăng Nhập không được để trống !");
             txtuserID.requestFocus();
@@ -323,19 +332,44 @@ public class Pln_User_addNew extends javax.swing.JPanel {
             txtuserID.requestFocus();
             return false;
         }
-        if (userid.contains(" ")) {
+        if (Password.contains(" ")) {
             JOptionPane.showMessageDialog(null, "Mật khẩu không được phép có khoảng trắng!");
             txtpassword.requestFocus();
             return false;
         }
-        if (userid.length() == 0) {
+        if (Password.length() == 0) {
             JOptionPane.showMessageDialog(null, "Mật khẩu không được để trống !");
-            txtuserID.requestFocus();
+            txtpassword.requestFocus();
             return false;
         }
-        if (userid.length() < 6) {
+        if (Password.length() < 6) {
             JOptionPane.showMessageDialog(null, "Mật khẩu phải có tối thiểu 6 ký tự !");
-            txtuserID.requestFocus();
+            txtpassword.requestFocus();
+            return false;
+        }
+        if (Password.length() > 50) {
+            JOptionPane.showMessageDialog(null, "Mật khẩu tối đa 50 ký tự !");
+            txtpassword.requestFocus();
+            return false;
+        }
+        if (IDN.length() > 20) {
+            JOptionPane.showMessageDialog(null, "Số CMT tối đa 20 ký tự !");
+            txtpassword.requestFocus();
+            return false;
+        }
+        if (address.length() > 50) {
+            JOptionPane.showMessageDialog(null, "Địa chỉ tối đa 50 ký tự !");
+            txtpassword.requestFocus();
+            return false;
+        }
+        if (phone.length() > 15) {
+            JOptionPane.showMessageDialog(null, "Số điện thoại tối đa 15 ký tự !");
+            txtpassword.requestFocus();
+            return false;
+        }
+        if (email.length() > 50) {
+            JOptionPane.showMessageDialog(null, "Email tối đa 50 ký tự !");
+            txtpassword.requestFocus();
             return false;
         }
         return true;
@@ -368,6 +402,7 @@ public class Pln_User_addNew extends javax.swing.JPanel {
             }
         }
         tblUser.setModel(new DefaultTableModel(data, cols));
+        clearform();
     }//GEN-LAST:event_btnSearchActionPerformed
     // Sự kiện kích chuột vào bảng user lấy ra dữ liệu từng dòng thêm bảng sửa, thêm mới
     private void tblUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblUserMouseClicked
@@ -383,7 +418,7 @@ public class Pln_User_addNew extends javax.swing.JPanel {
         txtemail.setText(tblUser.getValueAt(row, 6).toString());
     }//GEN-LAST:event_tblUserMouseClicked
 //      Sự kiện kích chuột thêm mới user
-    private void btnSubmitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSubmitMouseClicked
+    private void btnInsertMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInsertMouseClicked
 
         if (validateSubmit(txtuserID.getText(), txtpassword.getText(), txtuserName.getText(), txtuserIDN.getText(), txtaddress.getText(), txtphone.getText(), cbxposition.getSelectedItem().toString(), txtemail.getText())) {
             try {
@@ -407,13 +442,10 @@ public class Pln_User_addNew extends javax.swing.JPanel {
                 Logger.getLogger(Frm_user.class.getName()).log(Level.SEVERE, null, ex);
             }
             showtable();
+            clearform();
         }
-        //Set các trường dữ liệu vào đối tượng user( entity) 
-
-
-    }//GEN-LAST:event_btnSubmitMouseClicked
-
-    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+    }//GEN-LAST:event_btnInsertMouseClicked
+    private void clearform() {
         txtuserID.setText(null);
         txtpassword.setText(null);
         txtuserName.setText(null);
@@ -423,48 +455,76 @@ public class Pln_User_addNew extends javax.swing.JPanel {
         txtemail.setText(null);
         txtSearch.setText(null);
         txtuserID.requestFocus();
-
+    }
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        clearform();
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("RestaurantManagermentPU");
-        UsersJpaController dao = new UsersJpaController(emf);
-        if (validateSubmit(txtuserID.getText(), txtpassword.getText(), txtuserName.getText(), txtuserIDN.getText(), txtaddress.getText(), txtphone.getText(), cbxposition.getSelectedItem().toString(), txtemail.getText())) {
-            
-        } else if (true) {
-            try {
-                entity = dao.findUsers(txtuserID.getText());
-                entity.setUserID(txtuserID.getText());
-                String Pass = MD5.encryptMD5(txtpassword.getText());
-                entity.setPassword(Pass);
-                entity.setUserName(txtuserName.getText());
-                entity.setUserIDN(txtuserIDN.getText());
-                entity.setAddress(txtaddress.getText());
-                entity.setPhone(txtphone.getText());
-                entity.setPosition(cbxposition.getSelectedItem().toString());
-                entity.setEmail(txtemail.getText());
-                dao.edit(entity);
-            } catch (Exception ex) {
-                Logger.getLogger(Frm_user.class.getName()).log(Level.SEVERE, null, ex);
+        int row = tblUser.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(null, "Hãy chọn người cần sửa thông tin trong bảng !");
+        } else {
+            if (validateSubmit(txtuserID.getText(), txtpassword.getText(), txtuserName.getText(), txtuserIDN.getText(), txtaddress.getText(), txtphone.getText(), cbxposition.getSelectedItem().toString(), txtemail.getText())) {
+                int checkpass = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa người này !");
+                if (checkpass == JOptionPane.YES_OPTION) {
+                    try {
+                        EntityManagerFactory emf = Persistence.createEntityManagerFactory("RestaurantManagermentPU");
+                        UsersJpaController dao = new UsersJpaController(emf);
+                        entity = dao.findUsers(txtuserID.getText());
+                        entity.setUserID(txtuserID.getText());
+                        String Pass = MD5.encryptMD5(txtpassword.getText());
+                        entity.setPassword(Pass);
+                        entity.setUserName(txtuserName.getText());
+                        entity.setUserIDN(txtuserIDN.getText());
+                        entity.setAddress(txtaddress.getText());
+                        entity.setPhone(txtphone.getText());
+                        entity.setPosition(cbxposition.getSelectedItem().toString());
+                        entity.setEmail(txtemail.getText());
+                        dao.edit(entity);
+                    } catch (Exception ex) {
+                        Logger.getLogger(Frm_user.class.getName()).log(Level.SEVERE, null, ex);
+                        JOptionPane.showMessageDialog(null, "Hãy chọn người cần sửa thông tin trong bảng !");
+                    }
+                    showtable();
+                    clearform();
+                    tblUser.clearSelection();
+                } else {
+                    clearform();
+                    return;
+                }
+
             }
-            showtable();
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            EntityManagerFactory emf = Persistence.createEntityManagerFactory("RestaurantManagermentPU");
-            UsersJpaController dao = new UsersJpaController(emf);
-            dao.destroy(txtuserID.getText());
-        } catch (IllegalOrphanException | NonexistentEntityException ex) {
-            Logger.getLogger(Pln_User_addNew.class.getName()).log(Level.SEVERE, null, ex);
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        int row = tblUser.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(this, "Hãy chọn người cần xóa thông tin trong bảng !");
+            return;
         }
+        int checkpass = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa người này !");
+        if (checkpass == JOptionPane.YES_OPTION) {
+            try {
+                EntityManagerFactory emf = Persistence.createEntityManagerFactory("RestaurantManagermentPU");
+                UsersJpaController dao = new UsersJpaController(emf);
+                dao.destroy(txtuserID.getText());
+            } catch (NonexistentEntityException ex) {
+                JOptionPane.showMessageDialog(this, "Hãy chọn người cần xóa trong bảng !");
+                Logger.getLogger(Pln_User_addNew.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            showtable();
+            clearform();
+        } else {
+            tblUser.clearSelection();
+            clearform();
+            txtuserID.requestFocus();
+            return;
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
-        showtable();
-    }//GEN-LAST:event_jButton1ActionPerformed
-//    
-// hàm show dữ liệu ra bảng
-
+    // hàm show dữ liệu ra bảng
     public void showtable() {
         Vector data = new Vector();
         Vector cols = new Vector();
@@ -490,6 +550,7 @@ public class Pln_User_addNew extends javax.swing.JPanel {
             data.add(user);
         }
         tblUser.setModel(new DefaultTableModel(data, cols));
+        tblUser.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         tblUser.setDefaultRenderer(String.class, centerRenderer);
@@ -497,11 +558,11 @@ public class Pln_User_addNew extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnInsert;
     private javax.swing.JButton btnSearch;
-    private javax.swing.JButton btnSubmit;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox cbxposition;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

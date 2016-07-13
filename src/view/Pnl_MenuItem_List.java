@@ -8,6 +8,8 @@ package view;
 import static commonfunction.Common.removeAccent;
 import dal.dao.ItemClassJpaController;
 import dal.dao.MenuItemJpaController;
+import dal.dao.exceptions.IllegalOrphanException;
+import dal.dao.exceptions.NonexistentEntityException;
 import dal.entity.ItemClass;
 import dal.entity.MenuItem;
 import java.awt.Font;
@@ -23,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 
 /**
@@ -42,7 +45,7 @@ public class Pnl_MenuItem_List extends javax.swing.JPanel {
     public Pnl_MenuItem_List() {
         initComponents();
         showtable();
-        loadcbx();        
+        loadcbx();
     }
 
     /**
@@ -265,8 +268,7 @@ public class Pnl_MenuItem_List extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        txtitemName.setText(null);
-        fmtxtitemPrice.setText(null);
+        clearform();
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
@@ -290,41 +292,56 @@ public class Pnl_MenuItem_List extends javax.swing.JPanel {
     }//GEN-LAST:event_btnInsertActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        clearform();
+        int row = tblItem.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(null, "Hãy chọn món cần xóa trong bảng !");
+        } else {
+            EntityManagerFactory emf = Persistence.createEntityManagerFactory("RestaurantManagermentPU");
+            MenuItemJpaController dao = new MenuItemJpaController(emf);
+            item = (MenuItem) tblItem.getValueAt(row, 1);
+            try {
+                dao.destroy(item.getItemID());
+            } catch (IllegalOrphanException | NonexistentEntityException ex) {
+                Logger.getLogger(Pnl_MenuItem_List.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            showtable();
+            clearform();
+        }
 
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        if (validateAddItem() == true) {
-            if (tblItem.getSelectedRow()<0) {
-                JOptionPane.showMessageDialog(null, "Hãy chọn món cần sửa thông tin trong bảng !");
-                return;
+        int row = tblItem.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(null, "Hãy chọn món cần xóa trong bảng !");
+        } else {
+            if (validateAddItem() == true) {
+                try {
+                    EntityManagerFactory emf = Persistence.createEntityManagerFactory("RestaurantManagermentPU");
+                    MenuItemJpaController dao = new MenuItemJpaController(emf);
+                    item = (MenuItem) tblItem.getValueAt(row, 1);
+                    item.setItemName(txtitemName.getText());
+                    item.setItemPrice(new BigDecimal((long) fmtxtitemPrice.getValue()));
+                    item.setClassID((ItemClass) cbxitemClass.getSelectedItem());
+                    dao.edit(item);
+                } catch (Exception ex) {
+                    Logger.getLogger(Pnl_MenuItem_List.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(new JPanel(), "Giá tiền nhập phải là số !", "Lỗi Nhập Liệu", JOptionPane.ERROR_MESSAGE);
+                }
+                showtable();
+                tblItem.clearSelection();
             }
-            try {
-                EntityManagerFactory emf = Persistence.createEntityManagerFactory("RestaurantManagermentPU");
-                MenuItemJpaController dao = new MenuItemJpaController(emf);
-                int row = tblItem.getSelectedRow();
-                item = (MenuItem)tblItem.getValueAt(row, 1);
-                item.setItemName(txtitemName.getText());
-                item.setItemPrice(new BigDecimal((long) fmtxtitemPrice.getValue()));
-                item.setClassID((ItemClass)cbxitemClass.getSelectedItem());
-                dao.edit(item);
-            } catch (Exception ex) {
-                Logger.getLogger(Pnl_MenuItem_List.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(new JPanel(), "Giá tiền nhập phải là số !", "Lỗi Nhập Liệu", JOptionPane.ERROR_MESSAGE);
-            }
-            showtable();
+            clearform();
         }
-        clearform();
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void tblItemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblItemMouseClicked
-        try { 
-            long price;           
-            int row = tblItem.getSelectedRow();            
+        try {
+            long price;
+            int row = tblItem.getSelectedRow();
             txtitemName.setText(tblItem.getValueAt(row, 1).toString());
             cbxitemClass.setSelectedItem(tblItem.getValueAt(row, 2));
-            BigDecimal value = (BigDecimal)tblItem.getValueAt(row, 3);
+            BigDecimal value = (BigDecimal) tblItem.getValueAt(row, 3);
             price = value.longValueExact();
             fmtxtitemPrice.setValue(price);
         } catch (Exception e) {
@@ -345,17 +362,17 @@ public class Pnl_MenuItem_List extends javax.swing.JPanel {
         ItemClassJpaController icdao = new ItemClassJpaController(emf);
         MenuItemJpaController dao = new MenuItemJpaController(emf);
         menulist = dao.findMenuItemEntities();
-        int i =1;
+        int i = 1;
         for (MenuItem u : menulist) {
             Vector item = new Vector();
-            Vector list_search= new Vector();
+            Vector list_search = new Vector();
             list_search.addElement(u.getItemName());
             list_search.addElement(u.getClassID().toString());
             list_search.addElement(u.getItemPrice().toString());
             item.addElement(i);
             item.addElement(u);
             item.addElement(u.getClassID());
-            item.addElement(u.getItemPrice());           
+            item.addElement(u.getItemPrice());
             i++;
             if (removeAccent(list_search.toString()).toLowerCase().contains(removeAccent(tex_search).toLowerCase())) {
                 data.add(item);
@@ -391,10 +408,6 @@ public class Pnl_MenuItem_List extends javax.swing.JPanel {
             txtitemName.requestFocus();
             return false;
         }
-//        if (fmtxtitemPrice.getValue().getClass() == String.class) {
-//            JOptionPane.showMessageDialog(null, "Giá tiền phải là số !");
-//            return false;
-//        }
         return true;
     }
 
@@ -415,7 +428,7 @@ public class Pnl_MenuItem_List extends javax.swing.JPanel {
         ItemClassJpaController icdao = new ItemClassJpaController(emf);
         MenuItemJpaController dao = new MenuItemJpaController(emf);
         menulist = dao.findMenuItemEntities();
-        int i =1;
+        int i = 1;
         for (MenuItem u : menulist) {
             Vector item = new Vector();
             item.addElement(i);
@@ -429,6 +442,8 @@ public class Pnl_MenuItem_List extends javax.swing.JPanel {
         tbl.setDataVector(data, cols);
         tblItem.setModel(new DefaultTableModel(data, cols));
         tblItem.getTableHeader().setFont(new Font("Arial", Font.BOLD, 15));
+        TableColumnModel tcm = tblItem.getColumnModel();
+        tcm.getColumn(0).setPreferredWidth(10);
         TableRowSorter<DefaultTableModel> s = new TableRowSorter<DefaultTableModel>(tbl);
         tblItem.setRowSorter(s);
     }

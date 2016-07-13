@@ -5,7 +5,6 @@
  */
 package dal.dao;
 
-import dal.dao.exceptions.IllegalOrphanException;
 import dal.dao.exceptions.NonexistentEntityException;
 import dal.dao.exceptions.PreexistingEntityException;
 import dal.entity.Customer;
@@ -73,7 +72,7 @@ public class CustomerJpaController implements Serializable {
         }
     }
 
-    public void edit(Customer customer) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(Customer customer) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -81,18 +80,6 @@ public class CustomerJpaController implements Serializable {
             Customer persistentCustomer = em.find(Customer.class, customer.getCusID());
             Collection<Orders> ordersCollectionOld = persistentCustomer.getOrdersCollection();
             Collection<Orders> ordersCollectionNew = customer.getOrdersCollection();
-            List<String> illegalOrphanMessages = null;
-            for (Orders ordersCollectionOldOrders : ordersCollectionOld) {
-                if (!ordersCollectionNew.contains(ordersCollectionOldOrders)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Orders " + ordersCollectionOldOrders + " since its cusID field is not nullable.");
-                }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
             Collection<Orders> attachedOrdersCollectionNew = new ArrayList<Orders>();
             for (Orders ordersCollectionNewOrdersToAttach : ordersCollectionNew) {
                 ordersCollectionNewOrdersToAttach = em.getReference(ordersCollectionNewOrdersToAttach.getClass(), ordersCollectionNewOrdersToAttach.getOrderID());
@@ -101,6 +88,12 @@ public class CustomerJpaController implements Serializable {
             ordersCollectionNew = attachedOrdersCollectionNew;
             customer.setOrdersCollection(ordersCollectionNew);
             customer = em.merge(customer);
+            for (Orders ordersCollectionOldOrders : ordersCollectionOld) {
+                if (!ordersCollectionNew.contains(ordersCollectionOldOrders)) {
+                    ordersCollectionOldOrders.setCusID(null);
+                    ordersCollectionOldOrders = em.merge(ordersCollectionOldOrders);
+                }
+            }
             for (Orders ordersCollectionNewOrders : ordersCollectionNew) {
                 if (!ordersCollectionOld.contains(ordersCollectionNewOrders)) {
                     Customer oldCusIDOfOrdersCollectionNewOrders = ordersCollectionNewOrders.getCusID();
@@ -129,7 +122,7 @@ public class CustomerJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
+    public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -141,16 +134,10 @@ public class CustomerJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The customer with id " + id + " no longer exists.", enfe);
             }
-            List<String> illegalOrphanMessages = null;
-            Collection<Orders> ordersCollectionOrphanCheck = customer.getOrdersCollection();
-            for (Orders ordersCollectionOrphanCheckOrders : ordersCollectionOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Customer (" + customer + ") cannot be destroyed since the Orders " + ordersCollectionOrphanCheckOrders + " in its ordersCollection field has a non-nullable cusID field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
+            Collection<Orders> ordersCollection = customer.getOrdersCollection();
+            for (Orders ordersCollectionOrders : ordersCollection) {
+                ordersCollectionOrders.setCusID(null);
+                ordersCollectionOrders = em.merge(ordersCollectionOrders);
             }
             em.remove(customer);
             em.getTransaction().commit();

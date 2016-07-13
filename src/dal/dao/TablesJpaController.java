@@ -5,7 +5,6 @@
  */
 package dal.dao;
 
-import dal.dao.exceptions.IllegalOrphanException;
 import dal.dao.exceptions.NonexistentEntityException;
 import dal.dao.exceptions.PreexistingEntityException;
 import java.io.Serializable;
@@ -73,7 +72,7 @@ public class TablesJpaController implements Serializable {
         }
     }
 
-    public void edit(Tables tables) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(Tables tables) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -81,18 +80,6 @@ public class TablesJpaController implements Serializable {
             Tables persistentTables = em.find(Tables.class, tables.getTableID());
             Collection<Orders> ordersCollectionOld = persistentTables.getOrdersCollection();
             Collection<Orders> ordersCollectionNew = tables.getOrdersCollection();
-            List<String> illegalOrphanMessages = null;
-            for (Orders ordersCollectionOldOrders : ordersCollectionOld) {
-                if (!ordersCollectionNew.contains(ordersCollectionOldOrders)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Orders " + ordersCollectionOldOrders + " since its tableID field is not nullable.");
-                }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
             Collection<Orders> attachedOrdersCollectionNew = new ArrayList<Orders>();
             for (Orders ordersCollectionNewOrdersToAttach : ordersCollectionNew) {
                 ordersCollectionNewOrdersToAttach = em.getReference(ordersCollectionNewOrdersToAttach.getClass(), ordersCollectionNewOrdersToAttach.getOrderID());
@@ -101,6 +88,12 @@ public class TablesJpaController implements Serializable {
             ordersCollectionNew = attachedOrdersCollectionNew;
             tables.setOrdersCollection(ordersCollectionNew);
             tables = em.merge(tables);
+            for (Orders ordersCollectionOldOrders : ordersCollectionOld) {
+                if (!ordersCollectionNew.contains(ordersCollectionOldOrders)) {
+                    ordersCollectionOldOrders.setTableID(null);
+                    ordersCollectionOldOrders = em.merge(ordersCollectionOldOrders);
+                }
+            }
             for (Orders ordersCollectionNewOrders : ordersCollectionNew) {
                 if (!ordersCollectionOld.contains(ordersCollectionNewOrders)) {
                     Tables oldTableIDOfOrdersCollectionNewOrders = ordersCollectionNewOrders.getTableID();
@@ -116,7 +109,7 @@ public class TablesJpaController implements Serializable {
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                String id = tables.getTableID();
+                Integer id = tables.getTableID();
                 if (findTables(id) == null) {
                     throw new NonexistentEntityException("The tables with id " + id + " no longer exists.");
                 }
@@ -129,7 +122,7 @@ public class TablesJpaController implements Serializable {
         }
     }
 
-    public void destroy(String id) throws IllegalOrphanException, NonexistentEntityException {
+    public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -141,16 +134,10 @@ public class TablesJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The tables with id " + id + " no longer exists.", enfe);
             }
-            List<String> illegalOrphanMessages = null;
-            Collection<Orders> ordersCollectionOrphanCheck = tables.getOrdersCollection();
-            for (Orders ordersCollectionOrphanCheckOrders : ordersCollectionOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Tables (" + tables + ") cannot be destroyed since the Orders " + ordersCollectionOrphanCheckOrders + " in its ordersCollection field has a non-nullable tableID field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
+            Collection<Orders> ordersCollection = tables.getOrdersCollection();
+            for (Orders ordersCollectionOrders : ordersCollection) {
+                ordersCollectionOrders.setTableID(null);
+                ordersCollectionOrders = em.merge(ordersCollectionOrders);
             }
             em.remove(tables);
             em.getTransaction().commit();
@@ -185,7 +172,7 @@ public class TablesJpaController implements Serializable {
         }
     }
 
-    public Tables findTables(String id) {
+    public Tables findTables(Integer id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(Tables.class, id);

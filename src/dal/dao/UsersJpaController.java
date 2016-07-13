@@ -5,7 +5,6 @@
  */
 package dal.dao;
 
-import dal.dao.exceptions.IllegalOrphanException;
 import dal.dao.exceptions.NonexistentEntityException;
 import dal.dao.exceptions.PreexistingEntityException;
 import java.io.Serializable;
@@ -73,7 +72,7 @@ public class UsersJpaController implements Serializable {
         }
     }
 
-    public void edit(Users users) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(Users users) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -81,18 +80,6 @@ public class UsersJpaController implements Serializable {
             Users persistentUsers = em.find(Users.class, users.getUserID());
             Collection<Orders> ordersCollectionOld = persistentUsers.getOrdersCollection();
             Collection<Orders> ordersCollectionNew = users.getOrdersCollection();
-            List<String> illegalOrphanMessages = null;
-            for (Orders ordersCollectionOldOrders : ordersCollectionOld) {
-                if (!ordersCollectionNew.contains(ordersCollectionOldOrders)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Orders " + ordersCollectionOldOrders + " since its userID field is not nullable.");
-                }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
             Collection<Orders> attachedOrdersCollectionNew = new ArrayList<Orders>();
             for (Orders ordersCollectionNewOrdersToAttach : ordersCollectionNew) {
                 ordersCollectionNewOrdersToAttach = em.getReference(ordersCollectionNewOrdersToAttach.getClass(), ordersCollectionNewOrdersToAttach.getOrderID());
@@ -101,6 +88,12 @@ public class UsersJpaController implements Serializable {
             ordersCollectionNew = attachedOrdersCollectionNew;
             users.setOrdersCollection(ordersCollectionNew);
             users = em.merge(users);
+            for (Orders ordersCollectionOldOrders : ordersCollectionOld) {
+                if (!ordersCollectionNew.contains(ordersCollectionOldOrders)) {
+                    ordersCollectionOldOrders.setUserID(null);
+                    ordersCollectionOldOrders = em.merge(ordersCollectionOldOrders);
+                }
+            }
             for (Orders ordersCollectionNewOrders : ordersCollectionNew) {
                 if (!ordersCollectionOld.contains(ordersCollectionNewOrders)) {
                     Users oldUserIDOfOrdersCollectionNewOrders = ordersCollectionNewOrders.getUserID();
@@ -129,7 +122,7 @@ public class UsersJpaController implements Serializable {
         }
     }
 
-    public void destroy(String id) throws IllegalOrphanException, NonexistentEntityException {
+    public void destroy(String id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -141,16 +134,10 @@ public class UsersJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The users with id " + id + " no longer exists.", enfe);
             }
-            List<String> illegalOrphanMessages = null;
-            Collection<Orders> ordersCollectionOrphanCheck = users.getOrdersCollection();
-            for (Orders ordersCollectionOrphanCheckOrders : ordersCollectionOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Users (" + users + ") cannot be destroyed since the Orders " + ordersCollectionOrphanCheckOrders + " in its ordersCollection field has a non-nullable userID field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
+            Collection<Orders> ordersCollection = users.getOrdersCollection();
+            for (Orders ordersCollectionOrders : ordersCollection) {
+                ordersCollectionOrders.setUserID(null);
+                ordersCollectionOrders = em.merge(ordersCollectionOrders);
             }
             em.remove(users);
             em.getTransaction().commit();

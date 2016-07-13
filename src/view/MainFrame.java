@@ -5,6 +5,7 @@
  */
 package view;
 
+import dal.entity.Users;
 import java.awt.Toolkit;
 
 /**
@@ -16,6 +17,7 @@ public class MainFrame extends javax.swing.JFrame {
     /**
      * Creates new form MainFrame
      */
+    static Users user_admin =new Users();
     public MainFrame() {
 //        Toolkit tk = Toolkit.getDefaultToolkit();
         initComponents();
@@ -34,7 +36,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         jPopupMenu1 = new javax.swing.JPopupMenu();
-        jSplitPane1 = new javax.swing.JSplitPane();
+        splMain = new javax.swing.JSplitPane();
         jPanel1 = new javax.swing.JPanel();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
@@ -42,10 +44,10 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        mni_meu_listTable = new javax.swing.JMenuItem();
+        mni_menu_table = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        mni_MenuList = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
@@ -56,9 +58,9 @@ public class MainFrame extends javax.swing.JFrame {
         setBackground(new java.awt.Color(255, 255, 255));
         setName("MainFrame"); // NOI18N
 
-        jSplitPane1.setBackground(new java.awt.Color(255, 255, 255));
-        jSplitPane1.setDividerLocation(160);
-        jSplitPane1.setToolTipText("");
+        splMain.setBackground(new java.awt.Color(255, 255, 255));
+        splMain.setDividerLocation(160);
+        splMain.setToolTipText("");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(160, 800));
@@ -99,7 +101,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap(252, Short.MAX_VALUE))
         );
 
-        jSplitPane1.setLeftComponent(jPanel1);
+        splMain.setLeftComponent(jPanel1);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setToolTipText("");
@@ -116,7 +118,7 @@ public class MainFrame extends javax.swing.JFrame {
             .addGap(0, 736, Short.MAX_VALUE)
         );
 
-        jSplitPane1.setRightComponent(jPanel2);
+        splMain.setRightComponent(jPanel2);
 
         jMenuBar1.setBackground(new java.awt.Color(255, 255, 255));
         jMenuBar1.setBorder(null);
@@ -125,38 +127,45 @@ public class MainFrame extends javax.swing.JFrame {
         jMenu1.setBackground(new java.awt.Color(255, 255, 255));
         jMenu1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jMenu1.setText("Hoạt Động");
+        jMenu1.setBorderPainted(true);
         jMenu1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jMenu1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jMenu1.setMargin(new java.awt.Insets(0, 0, 0, 5));
         jMenu1.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/images/App-login-manager-icon.png"))); // NOI18N
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ENTER, java.awt.event.InputEvent.ALT_MASK));
-        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/list.png"))); // NOI18N
-        jMenuItem1.setText("Danh sách bàn");
-        jMenu1.add(jMenuItem1);
+        mni_meu_listTable.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ENTER, java.awt.event.InputEvent.ALT_MASK));
+        mni_meu_listTable.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/list.png"))); // NOI18N
+        mni_meu_listTable.setText("Danh sách bàn");
+        jMenu1.add(mni_meu_listTable);
 
-        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.ALT_MASK));
-        jMenuItem2.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jame Moriarty\\Documents\\NetBeansProjects\\RestaurantManagerment\\src\\images\\t1.png")); // NOI18N
-        jMenuItem2.setText("Thêm bàn");
-        jMenu1.add(jMenuItem2);
+        mni_menu_table.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.ALT_MASK));
+        mni_menu_table.setIcon(new javax.swing.ImageIcon("C:\\Users\\Jame Moriarty\\Documents\\NetBeansProjects\\RestaurantManagerment\\src\\images\\t1.png")); // NOI18N
+        mni_menu_table.setText("Thêm bàn");
+        mni_menu_table.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mni_menu_tableActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mni_menu_table);
 
         jMenuBar1.add(jMenu1);
 
         jMenu2.setBackground(new java.awt.Color(255, 255, 255));
         jMenu2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jMenu2.setText("Thực Đơn");
+        jMenu2.setBorderPainted(true);
         jMenu2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jMenu2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jMenu2.setMargin(new java.awt.Insets(0, 0, 0, 5));
 
-        jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/re.png"))); // NOI18N
-        jMenuItem3.setText("Xem Thực Đơn");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        mni_MenuList.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/re.png"))); // NOI18N
+        mni_MenuList.setText("Xem Thực Đơn");
+        mni_MenuList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                mni_MenuListActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem3);
+        jMenu2.add(mni_MenuList);
 
         jMenuItem4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/add.png"))); // NOI18N
         jMenuItem4.setText("Thêm Món");
@@ -176,6 +185,7 @@ public class MainFrame extends javax.swing.JFrame {
         jMenu3.setBackground(new java.awt.Color(255, 255, 255));
         jMenu3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jMenu3.setText("Nhân Viên");
+        jMenu3.setBorderPainted(true);
         jMenu3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jMenu3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jMenu3.setMargin(new java.awt.Insets(0, 0, 0, 5));
@@ -196,6 +206,7 @@ public class MainFrame extends javax.swing.JFrame {
         jMenu4.setBackground(new java.awt.Color(255, 255, 255));
         jMenu4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jMenu4.setText("Thống Kê");
+        jMenu4.setBorderPainted(true);
         jMenu4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jMenuBar1.add(jMenu4);
 
@@ -205,11 +216,11 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1)
+            .addComponent(splMain)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1)
+            .addComponent(splMain)
         );
 
         setSize(new java.awt.Dimension(1109, 817));
@@ -221,17 +232,21 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_MIuserActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-        // TODO add your handling code here:
+        splMain.setRightComponent(new Pnl_ItemClass());
     }//GEN-LAST:event_jMenuItem5ActionPerformed
     
     private void btnUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserActionPerformed
-       jSplitPane1.setRightComponent(new Pln_User_addNew());
+       splMain.setRightComponent(new Pln_User_addNew());
     }//GEN-LAST:event_btnUserActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        jSplitPane1.setRightComponent(new Pnl_MenuItem_List());
+    private void mni_MenuListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_MenuListActionPerformed
+        splMain.setRightComponent(new Pnl_MenuItem_List());
         
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    }//GEN-LAST:event_mni_MenuListActionPerformed
+
+    private void mni_menu_tableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_menu_tableActionPerformed
+        splMain.setRightComponent(new Pnl_Table());
+    }//GEN-LAST:event_mni_menu_tableActionPerformed
 
     /**
      * @param args the command line arguments
@@ -278,14 +293,14 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPopupMenu jPopupMenu1;
-    private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JMenuItem mni_MenuList;
+    private javax.swing.JMenuItem mni_menu_table;
+    private javax.swing.JMenuItem mni_meu_listTable;
+    private javax.swing.JSplitPane splMain;
     // End of variables declaration//GEN-END:variables
 }

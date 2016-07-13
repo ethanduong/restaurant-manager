@@ -8,9 +8,10 @@ package dal.entity;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -29,6 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Tables.findAll", query = "SELECT t FROM Tables t"),
     @NamedQuery(name = "Tables.findByTableID", query = "SELECT t FROM Tables t WHERE t.tableID = :tableID"),
+    @NamedQuery(name = "Tables.findByTableName", query = "SELECT t FROM Tables t WHERE t.tableName = :tableName"),
     @NamedQuery(name = "Tables.findByTableSize", query = "SELECT t FROM Tables t WHERE t.tableSize = :tableSize"),
     @NamedQuery(name = "Tables.findByStatus", query = "SELECT t FROM Tables t WHERE t.status = :status")})
 public class Tables implements Serializable {
@@ -36,50 +38,53 @@ public class Tables implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "tableID")
-    private String tableID;
-    @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer tableID;
+    @Column(name = "tableName")
+    private String tableName;
     @Column(name = "tableSize")
-    private short tableSize;
-    @Basic(optional = false)
+    private String tableSize;
     @Column(name = "status")
-    private boolean status;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tableID")
+    private Boolean status;
+    @OneToMany(mappedBy = "tableID")
     private Collection<Orders> ordersCollection;
 
     public Tables() {
     }
 
-    public Tables(String tableID) {
+    public Tables(Integer tableID) {
         this.tableID = tableID;
     }
 
-    public Tables(String tableID, short tableSize, boolean status) {
-        this.tableID = tableID;
-        this.tableSize = tableSize;
-        this.status = status;
-    }
-
-    public String getTableID() {
+    public Integer getTableID() {
         return tableID;
     }
 
-    public void setTableID(String tableID) {
+    public void setTableID(Integer tableID) {
         this.tableID = tableID;
     }
 
-    public short getTableSize() {
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
+    public String getTableSize() {
         return tableSize;
     }
 
-    public void setTableSize(short tableSize) {
+    public void setTableSize(String tableSize) {
         this.tableSize = tableSize;
     }
 
-    public boolean getStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
@@ -114,7 +119,7 @@ public class Tables implements Serializable {
 
     @Override
     public String toString() {
-        return "dal.entity.Tables[ tableID=" + tableID + " ]";
+        return tableName;
     }
     
 }

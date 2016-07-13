@@ -41,20 +41,18 @@ public class Orders implements Serializable {
     @Column(name = "orderID")
     private Long orderID;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Basic(optional = false)
     @Column(name = "totalAmount")
     private BigDecimal totalAmount;
-    @Basic(optional = false)
     @Column(name = "status")
-    private boolean status;
+    private Boolean status;
     @JoinColumn(name = "cusID", referencedColumnName = "cusID")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Customer cusID;
     @JoinColumn(name = "tableID", referencedColumnName = "tableID")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Tables tableID;
     @JoinColumn(name = "userID", referencedColumnName = "userID")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Users userID;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orders")
     private Collection<OrderDetails> orderDetailsCollection;
@@ -64,12 +62,6 @@ public class Orders implements Serializable {
 
     public Orders(Long orderID) {
         this.orderID = orderID;
-    }
-
-    public Orders(Long orderID, BigDecimal totalAmount, boolean status) {
-        this.orderID = orderID;
-        this.totalAmount = totalAmount;
-        this.status = status;
     }
 
     public Long getOrderID() {
@@ -88,11 +80,11 @@ public class Orders implements Serializable {
         this.totalAmount = totalAmount;
     }
 
-    public boolean getStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 

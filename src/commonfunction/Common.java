@@ -5,8 +5,13 @@
  */
 package commonfunction;
 
+import java.awt.Component;
 import java.text.Normalizer;
 import java.util.regex.Pattern;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 
 /**
  *
@@ -19,5 +24,5 @@ public class Common {
         String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
         Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
         return pattern.matcher(temp).replaceAll("");
-    }
+    }   
 }

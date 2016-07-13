@@ -8,7 +8,6 @@ package dal.entity;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -47,7 +46,7 @@ public class Customer implements Serializable {
     @Basic(optional = false)
     @Column(name = "cusPhone")
     private String cusPhone;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cusID")
+    @OneToMany(mappedBy = "cusID")
     private Collection<Orders> ordersCollection;
 
     public Customer() {
